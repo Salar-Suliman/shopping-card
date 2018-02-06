@@ -5,56 +5,55 @@ class shoppingCart {
     this.db.shipping = this.db.shipping || 0;
     this.db.time = this.db.time || 0;
     this.elements = {
-      //TODO provide selectors for:
-      //- product list
-      //- selector where the contents of the cart should be displayed
-      //- the reset button
-      totaltarget: document.querySelectorAll(".total-target"),
-      cart: document.getElementById("cart"),
-      //- total amount
-      //- total template
-      template: document.getElementById("template")
+            list: document.getElementById("products"),
+            items: document.querySelectorAll("#products li"),
+            result: document.querySelectorAll(".cartresult"),
+            reset: document.getElementById("reset"),
+            cart: document.getElementById("cart"),
+            totaltarget: document.querySelectorAll(".total-target"),
+            total_template: document.getElementById("total-template"),
+            template: document.getElementById("template")
     }
     this.init()
   }
-  init(){
-    //here you take your cart item template and clone this piece of html to a virtual copy
-    var card = this.elements.template
-    for (var i in database ) {
-      var element = card.cloneNode(true);
-      //TODO here we have clone our template lets remove the id first and rmove display none class
-
-      //TODO fill the element with the image from the database and add the name of the product to the title
-      
-      //TODO lets put in the footer the shipping costs and delivery time
-
-      //TODO now we take the  button and fill it with all our data to use this for the remove action
-
-      // Fade-in effect
-      // this removes the faded class with a timeout from all divs - wooosh!
-      var divs = document.querySelectorAll('#products > div');
-      var time = 0;
-      for (let div of divs) {
-        setTimeout(function(){
-          div.classList.remove('faded');
-        }, time);
-        time+=100
-      }
+  init() {
+        var t = this.elements.template;
+        for (var e in database) {
+            var i = t.cloneNode(!0);
+            i.removeAttribute("id"),
+            i.classList.remove("d-none"),
+            i.querySelector(".card-img-top").src = database[e].image,
+            i.querySelector(".card-title").prepend(e);
+            var s = document.createElement("small");
+            s.classList.add("text-muted"),
+            s.innerHTML = `shipping: ${database[e].shipping}&euro; <br> delivery: ${database[e].delivery}d`,
+            i.querySelector(".card-footer").appendChild(s);
+            var a = i.querySelector(".btn-primary");
+            a.dataset.name = e,
+            a.dataset.delivery = database[e].delivery,
+            a.dataset.shipping = database[e].shipping,
+            a.dataset.price = database[e].price,
+            this.elements.list.appendChild(i);
+            var r = document.querySelectorAll("#products > div")
+              , n = 0;
+            for (let t of r)
+                setTimeout(function() {
+                    t.classList.remove("faded")
+                }, n),
+                n += 100
+        }
+        document.addEventListener("click", t=>{
+            if (t.target && t.target.classList.contains("btn-danger")) {
+                this.findItemKey(t.target.dataset.name);
+                this.updateCart(t.target.dataset.name, !0)
+            } else
+                t.target && t.target.classList.contains("cart-button") && (this.updateCart(t.target.dataset.name),
+                this.render())
+        }
+        ),
+        this.render(),
+        this.resetEventListener()
     }
-    document.addEventListener('click', (e)=>{
-      // these are the event listeners for dynamically created elements. Eg: A element is not present and will be generated and rendered with js, its hart to define the event listeners on document load. They will not hook up, so we listen to the document
-      if(e.target && e.target.classList.contains( 'btn-danger' )){
-        let itemKey = this.findItemKey(e.target.dataset.name)
-        this.updateCart(e.target.dataset.name, true)
-      } else if (e.target && e.target.classList.contains( 'cart-button' )){
-        this.updateCart(e.target.dataset.name);
-        this.render();
-      }
-    })
-
-    this.render()
-    this.resetEventListener()
-  }
   resetEventListener() {
     this.elements.reset.addEventListener('click', (e)=>{
       this.db.items = []
@@ -65,87 +64,72 @@ class shoppingCart {
       this.render()
     })
   }
-  findItemKey(itemName){
-    //TODO this is the "find a item" in the database function, refactor it to array.filter
-    for (let i = 0; i < this.db.items.length; i++){
-      if (this.db.items[i].name == itemName){
-        return i
-      }
+  findItemKey(t) {
+        for (let e = 0; e < this.db.items.length; e++)
+            if (this.db.items[e].name == t)
+                return e
     }
-  }
-  updateCart(item, remove = false){
-    //here the magic happens
-    //try to understand what happens here
-    let itemKey = this.findItemKey(item)
-    if(remove){
-      if(this.db.items[itemKey].count > 1){
-        this.db.items[itemKey].count--
-      }else{
-        this.db.items.shift(itemKey)
-      }
-    } else {
-      if(itemKey !== undefined){
-        this.db.items[itemKey].count++
-      } else {
-        this.db.items.push({shipping: event.target.dataset.shipping, name: event.target.dataset.name, price: event.target.dataset.price, delivery: event.target.dataset.delivery, count: 1})
-      }
+     removeFromCart(t) {
+        this.findItemKey(t)
     }
-    if(this.db.items.length > 0) {
-      this.db.total = this.db.items.map((i) => {
-        return i.price * i.count
-      }).reduce((e, i) => Number(e) + Number(i))
-
-      this.db.shipping = this.db.items.map((i) => {
-        return i.shipping
-      })
-      this.db.shipping = Math.max(...this.db.shipping)
-
-      this.db.delivery = this.db.items.map((i) => {
-        return i.delivery
-      })
-      this.db.delivery = Math.max(...this.db.delivery)
-    } else {
-      this.db.shipping = 0;
-      this.db.total = 0;
-      this.db.delivery = 0;
+  updateCart(t, e=!1) {
+        let i = this.findItemKey(t);
+        e ? this.db.items[i].count > 1 ? this.db.items[i].count-- : this.db.items.shift(i) : void 0 !== i ? this.db.items[i].count++ : this.db.items.push({
+            shipping: event.target.dataset.shipping,
+            name: event.target.dataset.name,
+            price: event.target.dataset.price,
+            delivery: event.target.dataset.delivery,
+            count: 1
+        }),
+        this.db.items.length > 0 ? (this.db.total = this.db.items.map(t=>t.price * t.count).reduce((t,e)=>Number(t) + Number(e)),
+        this.db.shipping = this.db.items.map(t=>t.shipping),
+        this.db.shipping = Math.max(...this.db.shipping),
+        this.db.delivery = this.db.items.map(t=>t.delivery),
+        this.db.delivery = Math.max(...this.db.delivery)) : (this.db.shipping = 0,
+        this.db.total = 0,
+        this.db.delivery = 0),
+        localStorage.setItem("cart", JSON.stringify({
+            shipping: this.db.shipping,
+            total: this.db.total,
+            items: this.db.items,
+            delivery: this.db.delivery
+        })),
+        this.render()
     }
-
-    localStorage.setItem("cart", JSON.stringify( {shipping: this.db.shipping, total: this.db.total, items: this.db.items, delivery: this.db.delivery } ))
-    this.render()
-  }
-  render(){
-    this.db.items = this.db.items || []
-    // the function checks if items are in the cart and hides the cart if it is empty
-    if( this.db.items.length > 0 ){
-      this.elements.cart.classList.remove('faded')
-      for (let i = 0; i < this.elements.totaltarget.length; i++){
-        this.elements.totaltarget[i].classList.remove('faded')
-      }
-    } else {
-      this.elements.cart.classList.add('faded')
-      for (let i = 0; i < this.elements.totaltarget.length; i++){
-        this.elements.totaltarget[i].classList.add('faded')
-      }
+      render() {
+        if (this.db.items = this.db.items || [],
+        this.db.items.length > 0) {
+            this.elements.cart.classList.remove("faded");
+            for (let t = 0; t < this.elements.totaltarget.length; t++)
+                this.elements.totaltarget[t].classList.remove("faded")
+        } else {
+            this.elements.cart.classList.add("faded");
+            for (let t = 0; t < this.elements.totaltarget.length; t++)
+                this.elements.totaltarget[t].classList.add("faded")
+        }
+        var t = document.createElement("div");
+        this.db.items.forEach(e=>{
+            var i = document.createElement("li");
+            i.classList += "list-group-item d-flex justify-content-between align-items-center ",
+            i.innerHTML = `<span class="badge badge-info badge-pill mr-2">${e.count} </span>  ${e.name} - ${e.price}&euro; <span class="ml-auto mr-3 font-weight-bold">${(e.price * e.count).toFixed(2)}&euro;</span>`;
+            var s = document.createElement("button");
+            s.classList.add("btn", "btn-sm", "btn-danger"),
+            s.dataset.name = e.name,
+            s.innerHTML = "<i class='fa fa-close pointer-events-none'></i>",
+            i.appendChild(s),
+            t.appendChild(i)
+        }
+        );
+        var e = this.elements.total_template;
+        for (let t = 0; t < this.elements.totaltarget.length; t++)
+            (e = e.cloneNode(!0)).removeAttribute("id"),
+            e.classList.remove("d-none"),
+            e.querySelector(".total").innerHTML = this.db.total ? this.db.total.toFixed(2) : 0,
+            e.querySelector(".delivery").innerHTML = this.db.delivery ? this.db.delivery.toFixed(0) : 0,
+            e.querySelector(".shipping").innerHTML = this.db.shipping ? this.db.shipping.toFixed(0) : 0,
+            this.elements.totaltarget[t].innerHTML = e.innerHTML;
+        for (let e = 0; e < this.elements.result.length; e++)
+            this.elements.result[e].innerHTML = t.innerHTML
     }
-
-    var cart = document.createElement('div')
-    this.db.items.forEach( item => {
-      //TODO create a list item, add bootstrap classes
-      //fill it with a bootstrap badge span which shows the count, the name, the price, the total and the remove button
-      // here yo go
-      cart.appendChild(element);
-    })
-    for (let i = 0; i < this.elements.result.length; i++){
-      this.elements.result[i].innerHTML = cart.innerHTML
-    }
-    //TODO we want to show the list of totals several times on the page
-    //we loop over the target elements, take each time a new template, fill it with data and display it on the page
-    var ttemplate = this.elements.total_template
-    for (let i = 0; i < this.elements.totaltarget.length; i++){
-      ttemplate = ttemplate.cloneNode(true);
-      // here yo go
-      this.elements.totaltarget[i].innerHTML = ttemplate.innerHTML
-    }
-  }
 }
-var instaceOfCart = new shoppingCart();
+var instaceOfCart = new shoppingCart;

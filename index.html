@@ -14,7 +14,8 @@
     <header class="header clearfix">
       <nav class="navbar navbar-expand navbar-light bg-light justify-content-between">
         <a class="navbar-brand" href="#">Kauf dich glücklich!</a>
-        <div class="ml-auto total-target mr-2 faded faders"> </div>
+        <!-- total-target js -->
+        <div class="ml-auto total-target mr-2 faded faders"></div>
         <div class="" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
@@ -23,6 +24,7 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <h3 class="mx-3">Your Cart</h3>
+                <!-- target js-->
                 <ul class="cartresult list-group-flush list-group"> </ul>
                 <div class="dropdown-divider"></div>
                 <div class="total-target mx-3"> </div>
@@ -38,14 +40,17 @@
       <div class="row">
         <div class="col-md-12">
           <h2 class="text-center">Our Products</h2>
+          <!-- list and item js   -->
           <div id="products" class="mb-5 row"></div>
-        </div>
+        </div> 
+            <!-- card js -->
         <div id="cart" class="col-md-12 faders faded">
           <div class="card">
             <div class="card-header">
               <h3>Cart</h3>
             </div>
             <div class="">
+              <!-- result js -->
               <ul class="list-group mb-3 list-group-flush cartresult"> </ul>
             </div>
             <div class="card-footer">
@@ -66,10 +71,11 @@
 
 
     <!-- total-template-->
-    <span id="total-template" class="ml-auto d-none summary"><small>Total: <b class="total"></b> &euro; | Shipping: <b class="shipping"></b> &euro; | Delivery: <b class="delivery"></b> days</small></span>
+    <span id="total-template" class="ml-auto d-none summary"><small>Total: <b class="total"></b> $ | Shipping: <b class="shipping"></b> $ | Delivery: <b class="delivery"></b> days</small></span>
 
     <!-- for product listemplate-->
-    <div class="col-md-3 col-sm-6  mb-3 faded faders" id="template">
+      <!-- template js -->
+    <div class="col-md-3 col-sm-6 d-none mb-3 faded faders" id="template">
       <div class="card">
         <img class="card-img-top" src="" alt="Card image cap">
         <div class="card-body">

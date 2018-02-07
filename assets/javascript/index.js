@@ -12,7 +12,8 @@ class shoppingCart {
             cart: document.getElementById("cart"),
             totaltarget: document.querySelectorAll(".total-target"),
             total_template: document.getElementById("total-template"),
-            template: document.getElementById("template")
+            template: document.getElementById("template"),
+
     }
     this.init()
   }
@@ -24,9 +25,25 @@ class shoppingCart {
             i.classList.remove("d-none"),
             i.querySelector(".card-img-top").src = database[e].image,
             i.querySelector(".card-title").prepend(e);
+           
+            var price = document.createElement("strong");
+            price.classList.add("text-muted");
+            price.innerHTML = `<br> price: ${database[e].price}$`;
+            i.querySelector(".card-title").appendChild(price);
+            var discount = document.createElement("strong");
+             if(database[e].discount){
+              discount.classList.add("text-danger");
+              discount.innerHTML = `<br> discount: ${database[e].discount}$`;
+              i.querySelector(".card-title").appendChild(discount);
+              price.style.textDecoration = 'line-through';
+              price.style.color = 'red';
+
+
+             }
+             
             var s = document.createElement("small");
             s.classList.add("text-muted"),
-            s.innerHTML = `shipping: ${database[e].shipping}&euro; <br> delivery: ${database[e].delivery}d`,
+            s.innerHTML = ` shipping: ${database[e].shipping}$ <br> delivery: ${database[e].delivery}d `,
             i.querySelector(".card-footer").appendChild(s);
             var a = i.querySelector(".btn-primary");
             a.dataset.name = e,
@@ -111,7 +128,7 @@ class shoppingCart {
         this.db.items.forEach(e=>{
             var i = document.createElement("li");
             i.classList += "list-group-item d-flex justify-content-between align-items-center ",
-            i.innerHTML = `<span class="badge badge-info badge-pill mr-2">${e.count} </span>  ${e.name} - ${e.price}&euro; <span class="ml-auto mr-3 font-weight-bold">${(e.price * e.count).toFixed(2)}&euro;</span>`;
+            i.innerHTML = `<span class="badge badge-info badge-pill mr-2">${e.count} </span>  ${e.name} - ${e.price}$ <span class="ml-auto mr-3 font-weight-bold">${(e.price * e.count).toFixed(2)}$</span>`;
             var s = document.createElement("button");
             s.classList.add("btn", "btn-sm", "btn-danger"),
             s.dataset.name = e.name,

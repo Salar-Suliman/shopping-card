@@ -4,7 +4,8 @@ var database = {
     shipping: 4.99,
     delivery: 5,
     content: "Curabitur blandit tempus porttitor. Aenean eu leo quam.",
-    image: "./assets/images/1.jpeg"
+    image: "./assets/images/1.jpeg",
+    discount:125
   },
   "Shoes": {
     price: 9.99,
@@ -19,7 +20,8 @@ var database = {
     shipping: 1.99,
     delivery: 2,
     content: "Aenean eu leo quam. Pellentesque ornare",
-    image: "./assets/images/3.jpeg"
+    image: "./assets/images/3.jpeg",
+    discount:180
 
   },
   "Suit": {
@@ -61,5 +63,6 @@ var database = {
     content: "Porttitor. Aenean eu.",
     image: "./assets/images/3.jpeg"
 
-  },
+  }
+  
 }
